@@ -1,11 +1,14 @@
 // Paste into opacuserjs to have a skeleton to build upon for validating sms-number when the user changes their own smsnumber.
 
 $(document).ready(function () {
+    // Kör bara koden på sidan där låntagarna uppdaterar sina uppgifter
     if ($("body").is("#opac-patron-update")) {
+        // Bevaka fältet borrower_phone efter förändringar
         $("#borrower_phone").on("input", function () {
             if ($(this).data("lastval") !== $(this).val()) {
                 $(this).data("lastval", $(this).val());
                 var VAL = $("#borrower_phone").val();
+                // Ett reguljärt uttryck för att matcha mönstret hos mobilnummer
                 var phonepattern = /^\+46[1-9][0-9]{7,9}$/;
         
                 // Här logiken för kontroll av själva telefonnumret
