@@ -16,18 +16,21 @@ $(document).ready(function () {
                 if (phonepattern.test(VAL)) {
                     // Visa någon indikator för att allt är ok.
                     $("#borrower_phone").css("border-color", "green");
+                    $("#borrower_phone").css("background-color", "#d8ffe0");
                     // Aktivera submit-knappen.
                     // Kod för detta här isf.
                 }
  
                 else if ($("#borrower_phone").val().length === 0) {
                     $("#borrower_phone").css("border-color", "#cccccc");
+                    $("#borrower_phone").css("background-color", "initial");
                     // Aktivera submit-knappen.
                 }
  
                 else {
                     // Visa en indikator på att det finns problem med telefonnumret.
                     $("#borrower_phone").css("border-color", "red");
+                    $("#borrower_phone").css("background-color", "#ffd8d8");
                     // Deaktivera submit-knappen.
                 }
             }
