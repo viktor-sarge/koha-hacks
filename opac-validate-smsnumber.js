@@ -1,4 +1,5 @@
-// Paste into opacuserjs to have a skeleton to build upon for validating sms-number when the user changes their own smsnumber.
+// Klistra in i opacuserjs-sysprefen för att ha ett skelett att bygga på för att validera SMS-nummer.
+// Anpassa allra minst så att signalen inte är röd/grön vilket är problematiskt för färgblinda.
 
 $(document).ready(function () {
     // Kör bara koden på sidan där låntagarna uppdaterar sina uppgifter
