@@ -24,7 +24,7 @@ $(document).ready(function () {
             return $(this).text();
         });
     }
-    
+
     // Everything we want to do only to the main area of opac homepage
     if ($("body").is("#opac-main")) {
         // Removing right column and widening the main area
@@ -32,7 +32,7 @@ $(document).ready(function () {
         $(".span3").remove();
         $(".span7").toggleClass("span7 span10");
 
-        // IMAGE GRID CODE STARTS HERE
+        // Start of code for creating the grid of cover images
         // Sets the url of public report serving an array of biblionumbers + imagenumbers
         var url = "http://rhkonst.bibkat.se/cgi-bin/koha/svc/report?id=21";
 
@@ -53,8 +53,7 @@ $(document).ready(function () {
                 for (i = 0; i < 4; ++i) {   // Doing four columns per go but handling index out of range below
                     if (position + i < limit) {
                         cell = "<div class=\x22span3 text-center\x22><p><a href=\x22http://rhkonst.bibkat.se/cgi-bin/koha/opac-image.pl?imagenumber=" + result[position + i][1] + "\x22 data-lightbox=\x22coverset\x22 data-title=\x27<a href=\x22http://rhkonst.bibkat.se/cgi-bin/koha/opac-detail.pl?biblionumber=" + result[position + i][0] + "\x22>Beställ detta konstverk</a>\x27><img src=\x22/cgi-bin/koha/opac-image.pl?thumbnail=1&imagenumber=" + result[position + i][1] + "\x22 style=\x22height:180px\x22></a></p></div>";
-                    }
-                    else {
+                    } else {
                         cell = "<div class=\x22span3 text-center\x22><p></p></div>";
                     }
                     html = html + cell;
@@ -67,6 +66,7 @@ $(document).ready(function () {
         }); // end of the getJSON anonymous function
     } // End of body is #opac main
 }); // End of document ready
+
 /*!
  * Lightbox v2.9.0
  * by Lokesh Dhakar
