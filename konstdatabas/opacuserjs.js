@@ -18,7 +18,7 @@ $(document).ready(function () {
         $("a.toggle-hold-options").remove();
     }
 
-    // Removing author and other links by replacing the links with the link text
+    // Removing author and other links on detail-page by replacing the links with the link text
     if ($("body").is("#opac-detail")) {
         $("#catalogue_detail_biblio a").replaceWith(function () {
             return $(this).text();
@@ -34,35 +34,50 @@ $(document).ready(function () {
 
         // Start of code for creating the grid of cover images
         // Sets the url of public report serving an array of biblionumbers + imagenumbers
-        var url = "http://rhkonst.bibkat.se/cgi-bin/koha/svc/report?id=21";
+        var reportUrl = "http://rhkonst.bibkat.se/cgi-bin/koha/svc/report?id=21";
 
         // Fetching the JSON data from a public report
-        $.getJSON(url, function (result) {
-            $("<h1 style=\x22font-size:4ex;text-align:center\x22>" + "Tillgängligt just nu hos Artoteket" + "</h1>").appendTo($("#opacmainuserblock"));
-
+        $.getJSON(reportUrl, function (result) {
             var position = 0;
-            var rowStart = "<div class=\x22row-fluid\x22 style=\x22padding-bottom:5ex;\x22>";
-            var rowEnd = "</div>";
-            var cell = "";
-            var html = "";
             var i = 0;
             var limit = result.length;
+            var imageThumbnailLink = "";
+            var imageFullsizeLink = "";
+            var lightboxDataTitleLink = "";
+            var dataTitleHTML = "";
+            var $header = $();
+            var $row = $("<div/>", {"class": "row-fluid", "style": "padding-bottom:5ex"});
+            var $cell = $();
+            var $img = $();
+            var $linkForImage = $();
+            var $pElement = $();
+
+            $header = $("<h1/>", {"style": "font-size:4ex;text-align:center", "text": "Tillgängligt just nu hos Artoteket"});
+            $("#opacmainuserblock").append($header);
             // Working through the array of biblioids from 0 to lenght of array
             while (position < limit) {
-                html = html + rowStart;
-                for (i = 0; i < 4; ++i) {   // Doing four columns per go but handling index out of range below
+                for (i = 0; i < 4; ++i) {   // Four columns per run.
                     if (position + i < limit) {
-                        cell = "<div class=\x22span3 text-center\x22><p><a href=\x22http://rhkonst.bibkat.se/cgi-bin/koha/opac-image.pl?imagenumber=" + result[position + i][1] + "\x22 data-lightbox=\x22coverset\x22 data-title=\x27<a href=\x22http://rhkonst.bibkat.se/cgi-bin/koha/opac-detail.pl?biblionumber=" + result[position + i][0] + "\x22>Beställ detta konstverk</a>\x27><img src=\x22/cgi-bin/koha/opac-image.pl?thumbnail=1&imagenumber=" + result[position + i][1] + "\x22 style=\x22height:180px\x22></a></p></div>";
+                        imageThumbnailLink = "http://rhkonst.bibkat.se/cgi-bin/koha/opac-image.pl?thumbnail=1&imagenumber=" + result[position + i][1];
+                        imageFullsizeLink = "http://rhkonst.bibkat.se/cgi-bin/koha/opac-image.pl?imagenumber=" + result[position + i][1];
+                        lightboxDataTitleLink = "http://rhkonst.bibkat.se/cgi-bin/koha/opac-detail.pl?biblionumber=" + result[position + i][0];
+                        dataTitleHTML = "<a href=" + lightboxDataTitleLink + ">Beställ detta konstverk</a>";
+
+                        $img = $("<img/>", {"style": "height:180px", "src": imageThumbnailLink});
+                        $linkForImage = $("<a/>", {"href": imageFullsizeLink, "data-lightbox": "coverset", "data-title": dataTitleHTML}).append($img);
+                        $pElement = $("<p/>").append($linkForImage);
+                        $cell = $("<div/>", {"class": "span3 text-center"}).append($pElement);
+                        $($row).append($cell);
                     } else {
-                        cell = "<div class=\x22span3 text-center\x22><p></p></div>";
+                        // Add empty cells to keep it four columns just in case
+                        $cell = $("<div class='span3 text-center'><p></p></div>");
+                        $($row).append($cell);
                     }
-                    html = html + cell;
                 }
-                html = html + rowEnd;  // Adding the ending html before potentially breaking of the while loop
-                position = position + 4;  // Didnt do position++ in the for loop to not exit the while prematurely so now adding the 4
+                $("#opacmainuserblock").append($row);
+                $row = $("<div/>", {"class": "row-fluid", "style": "padding-bottom:5ex"});
+                position = position + 4;  // Increments position only here to not break while before all four columns are done
             }
-            // Add the final string of generated html
-            $("#opacmainuserblock").append(html);
         }); // end of the getJSON anonymous function
     } // End of body is #opac main
 }); // End of document ready
@@ -108,7 +123,7 @@ $(document).ready(function () {
   // Descriptions of all options available on the demo site:
   // http://lokeshdhakar.com/projects/lightbox2/index.html#options
   Lightbox.defaults = {
-    albumLabel: 'Image %1 of %2',
+    albumLabel: '%1 av %2',
     alwaysShowNavOnTouchDevices: false,
     fadeDuration: 600,
     fitImagesInViewport: true,
