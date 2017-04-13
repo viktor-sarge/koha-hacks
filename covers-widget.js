@@ -19,14 +19,22 @@ OPACMAINUSERBLOCK ---------
 
 OPACUSERJS--------
 
+function cleanISBN (input) {
+    input = input.replace(/-/g, "");
+    input = input.split(" ")[0]
+    return input;
+};
+
+
 $("#coverwidget-newBooks").ready(function () {
     var json_url = "http://localhost:8080/cgi-bin/koha/svc/report?id=1";
     $.getJSON(json_url, function (data) {
         $(data).each(function (i, row) {
             if(row[1] === null) {row[1] = "";}
             if(row[2] === null) {row[2] = "";}
-            if(row[2].slice)
-            var image = "<img src=\"http://www.adlibris.com/se/organisationer/showimage.aspx?isbn=" + row[3].slice(0, 10) + "\">";
+            row[2] = row[2].replace(" /", "");
+            row[3] = cleanISBN(row[3]);
+            var image = "<img src=\"http://www.adlibris.com/se/organisationer/showimage.aspx?isbn=" + row[3] + "\">";
             var author = "<p><strong>" + row[1] + "</strong></p>";
             var title = "<p></strong><a href=\"http://localhost:8080/cgi-bin/koha/opac-detail.pl?biblionumber=" + row[0] +"\">" + row[2] + "</a></p>";
             var item_html = "<li><div class=\"card\">" + image + "<br>" + author + title + "</div></li>";
