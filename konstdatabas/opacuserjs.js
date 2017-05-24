@@ -13,15 +13,55 @@ $(document).ready(function () {
     $("#opac-main-search").remove();
     $("ul.menu-collapse li:contains('dina listor')").remove();
 
-    // Removing the "toggle hold options bar" during placing a hold
-    if ($("body").is("#opac-holds")) {
-        $("a.toggle-hold-options").remove();
-    }
-
     // Removing author and other links on detail-page by replacing the links with the link text
     if ($("body").is("#opac-detail")) {
         $("#catalogue_detail_biblio a").replaceWith(function () {
             return $(this).text();
+        });
+    }
+    // View for placing holds require some changes
+    if ($("body").is("#opac-holds")) {
+        $("table.copiesrow").remove();
+        $("div.hold-options ul li:first").remove();
+        $("div.hold-options ul li:last").remove();
+        $("a.toggle-hold-options").remove();
+        $("div.notesrow label").html("Organisationsnr.<br>(obligatoriskt)");
+        $("div.notesrow").css("display", "none");
+        //$("input.placehold").prop("disabled",true);
+        $("select[name='branch']").change(function () {
+            console.log("Inside change of drop down case");
+            if ($("select[name='branch']").val() === "LOGISTIK") {
+                console.log("Triggered logistik case in dropdwon");
+                $("input.placehold").prop("disabled", true);
+                $("div.notesrow").css("display", "block");
+            } else {
+                $("input.placehold").prop("disabled", false);
+                $("div.notesrow").css("display", "none");
+            }
+        });
+
+
+// Bevaka fältet för orgnr. efter förändringar
+        $("div.notesrow textarea").on("input", function () {
+            if ($(this).data("lastval") !== $(this).val()) {
+                $(this).data("lastval", $(this).val());
+
+                // Här logiken för kontroll av själva textrutan
+                // Körs alltid, men själva rutan visas bara vid val "Logistikservice"
+                if ($("div.notesrow textarea").val().length > 2) {
+                    // Visa någon indikator för att allt är ok.
+                    $("div.notesrow textarea").css("border-color", "green");
+                    $("div.notesrow textarea").css("background-color", "#d8ffe0");
+                    // Aktivera submit-knappen.
+                    $("input.placehold").prop("disabled", false);
+                } else {
+                    // Visa en indikator på att det finns problem
+                    $("div.notesrow textarea").css("border-color", "red");
+                    $("div.notesrow textarea").css("background-color", "#ffd8d8");
+                    // Deaktivera submit-knappen
+                    $("input.placehold").prop("disabled", true);
+                }
+            }
         });
     }
 
@@ -45,15 +85,12 @@ $(document).ready(function () {
             var imageFullsizeLink = "";
             var lightboxDataTitleLink = "";
             var dataTitleHTML = "";
-            var $header = $();
             var $row = $("<div/>", {"class": "row-fluid", "style": "padding-bottom:5ex"});
             var $cell = $();
             var $img = $();
             var $linkForImage = $();
             var $pElement = $();
 
-            $header = $("<h1/>", {"style": "font-size:4ex;text-align:center", "text": "Tillgängligt just nu hos Artoteket"});
-            $("#opacmainuserblock").append($header);
             // Working through the array of biblioids from 0 to lenght of array
             while (position < limit) {
                 for (i = 0; i < 4; ++i) {   // Four columns per run.
