@@ -27,7 +27,6 @@ $(document).ready(function () {
         $("a.toggle-hold-options").remove();
         $("div.notesrow label").html("Organisationsnr.<br>(obligatoriskt)");
         $("div.notesrow").css("display", "none");
-        //$("input.placehold").prop("disabled",true);
         $("select[name='branch']").change(function () {
             console.log("Inside change of drop down case");
             if ($("select[name='branch']").val() === "LOGISTIK") {
@@ -74,7 +73,7 @@ $(document).ready(function () {
 
         // Start of code for creating the grid of cover images
         // Sets the url of public report serving an array of biblionumbers + imagenumbers
-        var reportUrl = "http://rhkonst.bibkat.se/cgi-bin/koha/svc/report?id=21";
+        var reportUrl = "http://rhkonst.bibkat.se/cgi-bin/koha/svc/report?id=23";
 
         // Fetching the JSON data from a public report
         $.getJSON(reportUrl, function (result) {
@@ -85,6 +84,8 @@ $(document).ready(function () {
             var imageFullsizeLink = "";
             var lightboxDataTitleLink = "";
             var dataTitleHTML = "";
+            var artist = "";
+            var title = "";
             var $row = $("<div/>", {"class": "row-fluid", "style": "padding-bottom:5ex"});
             var $cell = $();
             var $img = $();
@@ -95,13 +96,21 @@ $(document).ready(function () {
             while (position < limit) {
                 for (i = 0; i < 4; ++i) {   // Four columns per run.
                     if (position + i < limit) {
+                        artist = result[position + i][2];
+                        if (artist === null) { artist = ""; } 
+                        title = result[position + i][3];
+                        if (title === null) { title = ""; }
+                        measurement = result[position + i][4];
+                        if (measurement === null) { measurement = ""; }
+
+
                         imageThumbnailLink = "http://rhkonst.bibkat.se/cgi-bin/koha/opac-image.pl?thumbnail=1&imagenumber=" + result[position + i][1];
                         imageFullsizeLink = "http://rhkonst.bibkat.se/cgi-bin/koha/opac-image.pl?imagenumber=" + result[position + i][1];
                         lightboxDataTitleLink = "http://rhkonst.bibkat.se/cgi-bin/koha/opac-detail.pl?biblionumber=" + result[position + i][0];
                         dataTitleHTML = "<a href=" + lightboxDataTitleLink + ">Beställ detta konstverk</a>";
                         $img = $("<img/>", {"class": "lazy", "style": "height:180px; background-color:grey", "data-original": imageThumbnailLink});
                         $linkForImage = $("<a/>", {"href": imageFullsizeLink, "data-lightbox": "coverset", "data-title": dataTitleHTML}).append($img);
-                        $pElement = $("<p/>").append($linkForImage);
+                        $pElement = $("<p/>").append($linkForImage).append("<br>" + "<strong>\"" + title + "\"</strong>" + "<br>" + measurement + "<br>" + artist);
                         $cell = $("<div/>", {"class": "span3 text-center"}).append($pElement);
                         $($row).append($cell);
                     } else {
