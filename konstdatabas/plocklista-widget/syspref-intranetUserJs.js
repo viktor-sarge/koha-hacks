@@ -1,7 +1,7 @@
 $(document).ready(function () {
     
     if ($("body").is("#main_intranet-main")) {
-        var reportUrl = "http://rhkonst-admin.bibkat.se/cgi-bin/koha/svc/report?id=24";
+        var reportUrl = "http://rhkonst-admin.bibkat.se/cgi-bin/koha/svc/report?id=24"; // Change to id of your own report
         // Fetching the JSON data from a report
         $.getJSON(reportUrl, function (result) {
             var i = 0;
