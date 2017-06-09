@@ -1,0 +1,11 @@
+<script>
+function nWin() {
+        var w = window.open();
+        var html = $("#holdsToPull").html();
+        $(w.document.body).html(html);
+    }
+</script>
+<div><h1>Nya beställningar att hantera</h1>
+<button type="button" onclick="nWin()">Öppna lista för utskrift</button>
+<div id="holdsToPull" style="padding-top:10px"></div>
+</div>
