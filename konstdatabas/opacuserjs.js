@@ -113,7 +113,7 @@ $(document).ready(function () {
                         dataTitleHTML = "<a href=" + lightboxDataTitleLink + ">Beställ detta konstverk</a>";
                         $img = $("<img/>", {"class": "lazy", "style": "height:180px; background-color:grey", "data-original": imageThumbnailLink});
                         $linkForImage = $("<a/>", {"href": imageFullsizeLink, "data-lightbox": "coverset", "data-title": dataTitleHTML}).append($img);
-                        $pElement = $("<p/>").append($linkForImage).append("<br>" + "<strong>\"" + title + "\"</strong>" + "<br>" + tech + ", " + measurement + "<br>" + artist);
+                        $pElement = $("<p/>").append($linkForImage).append("<br>" + "<strong>\"" + title + "\"</strong>" + "<br>" + tech + ", " + measurement + " cm.<br>" + artist);
                         $cell = $("<div/>", {"class": "span3 text-center"}).append($pElement);
                         $($row).append($cell);
                     } else {
