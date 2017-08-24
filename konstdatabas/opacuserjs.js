@@ -73,7 +73,7 @@ $(document).ready(function () {
 
         // Start of code for creating the grid of cover images
         // Sets the url of public report serving an array of biblionumbers + imagenumbers
-        var reportUrl = "http://rhkonst.bibkat.se/cgi-bin/koha/svc/report?id=23";
+        var reportUrl = "http://rhkonst.bibkat.se/cgi-bin/koha/svc/report?id=26";
 
         // Fetching the JSON data from a public report
         $.getJSON(reportUrl, function (result) {
@@ -86,6 +86,7 @@ $(document).ready(function () {
             var dataTitleHTML = "";
             var artist = "";
             var title = "";
+            var tech = "";
             var $row = $("<div/>", {"class": "row-fluid", "style": "padding-bottom:5ex"});
             var $cell = $();
             var $img = $();
@@ -102,6 +103,8 @@ $(document).ready(function () {
                         if (title === null) { title = ""; }
                         measurement = result[position + i][4];
                         if (measurement === null) { measurement = ""; }
+                        tech = result[position + i][5];
+                        if (tech === null) { tech = ""; }
 
 
                         imageThumbnailLink = "http://rhkonst.bibkat.se/cgi-bin/koha/opac-image.pl?thumbnail=1&imagenumber=" + result[position + i][1];
@@ -110,7 +113,7 @@ $(document).ready(function () {
                         dataTitleHTML = "<a href=" + lightboxDataTitleLink + ">Beställ detta konstverk</a>";
                         $img = $("<img/>", {"class": "lazy", "style": "height:180px; background-color:grey", "data-original": imageThumbnailLink});
                         $linkForImage = $("<a/>", {"href": imageFullsizeLink, "data-lightbox": "coverset", "data-title": dataTitleHTML}).append($img);
-                        $pElement = $("<p/>").append($linkForImage).append("<br>" + "<strong>\"" + title + "\"</strong>" + "<br>" + measurement + "<br>" + artist);
+                        $pElement = $("<p/>").append($linkForImage).append("<br>" + "<strong>\"" + title + "\"</strong>" + "<br>" + tech + ", " + measurement + "<br>" + artist);
                         $cell = $("<div/>", {"class": "span3 text-center"}).append($pElement);
                         $($row).append($cell);
                     } else {
