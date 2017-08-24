@@ -1,4 +1,4 @@
-SELECT biblioimages.biblionumber, biblioimages.imagenumber, biblio.author, biblio.title, ExtractValue(biblioitems.marcxml,'//datafield[@tag="300"]/*') AS measurements, v.lib
+SELECT biblioimages.biblionumber, biblioimages.imagenumber, ExtractValue(biblioitems.marcxml,'//datafield[@tag="100"]/*') AS artist, biblio.title, ExtractValue(biblioitems.marcxml,'//datafield[@tag="300"]/*') AS measurements, v.lib
 FROM biblioimages
 INNER JOIN items
   ON items.biblionumber = biblioimages.biblionumber
