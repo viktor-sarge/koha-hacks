@@ -19,6 +19,12 @@ $(document).ready(function () {
             return $(this).text();
         });
     }
+
+    // Changing labels of name-fields to suit organization
+    if ($("body").is("#opac-patron-update")){
+        $("label[for='borrower_surname']").text('Avdelning: ');
+        $("label[for='borrower_firstname']").text('Namn: ');
+    }
     // View for placing holds require some changes
     if ($("body").is("#opac-holds")) {
         $("table.copiesrow").remove();
